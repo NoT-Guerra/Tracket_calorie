@@ -1,0 +1,52 @@
+[
+  {
+    "nome": "Petto di pollo",
+    "marca": "Generico",
+    "foto_url": "",
+    "calorie_100g": 110,
+    "proteine_100g": 23.1,
+    "carboidrati_100g": 0,
+    "grassi_100g": 1.2,
+    "fibra_100g": 0
+  },
+  {
+    "nome": "Riso bianco",
+    "marca": "Generico",
+    "foto_url": "",
+    "calorie_100g": 130,
+    "proteine_100g": 2.7,
+    "carboidrati_100g": 28,
+    "grassi_100g": 0.3,
+    "fibra_100g": 0.4
+  },
+  {
+    "nome": "Pasta di semola",
+    "marca": "Generico",
+    "foto_url": "",
+    "calorie_100g": 353,
+    "proteine_100g": 13,
+    "carboidrati_100g": 71,
+    "grassi_100g": 1.5,
+    "fibra_100g": 3.2
+  },
+  {
+    "nome": "Mela",
+    "marca": "Generico",
+    "foto_url": "",
+    "calorie_100g": 52,
+    "proteine_100g": 0.3,
+    "carboidrati_100g": 14,
+    "grassi_100g": 0.2,
+    "fibra_100g": 2.4
+  },
+  {
+    "nome": "Zucchine",
+    "marca": "Generico",
+    "foto_url": "",
+    "calorie_100g": 17,
+    "proteine_100g": 1.2,
+    "carboidrati_100g": 3.1,
+    "grassi_100g": 0.3,
+    "fibra_100g": 1
+  }
+]
