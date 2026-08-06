@@ -5,10 +5,12 @@ const path = require('path');
 const db = require('../database/db');
 const pdfController = require('../controllers/pdfController');
 
+const os = require('os');
+
 // Configurazione multer per l'upload di immagini
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../public/uploads/'));
+    cb(null, os.tmpdir());
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -168,6 +170,17 @@ router.post('/pasti/:id/alimenti', async (req, res) => {
   }
 });
 
+
+// Rimuovi alimento dal pasto
+router.delete('/pasto_alimenti/:id', async (req, res) => {
+  try {
+    await db.query('DELETE FROM pasto_alimenti WHERE id = ?', [req.params.id]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Errore nella rimozione dell\'alimento dal pasto' });
+  }
+});
 
 // --- DIARIO ---
 

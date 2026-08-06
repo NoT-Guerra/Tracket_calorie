@@ -38,6 +38,20 @@ function DiaryPage({ userId }) {
     window.open(`/api/diario/pdf?data=${dataOdierna}&utente_id=${userId}`, '_blank');
   };
 
+  const handleDeleteFood = async (pastoAlimentoId) => {
+    if (!window.confirm('Sei sicuro di voler rimuovere questo alimento?')) return;
+    try {
+      await axios.delete(`/api/pasto_alimenti/${pastoAlimentoId}`);
+      // Refresh data
+      const diaryRes = await axios.get(`/api/diario?data=${dataOdierna}&utente_id=${userId}`);
+      setDiario(diaryRes.data.diario);
+      setTotali(diaryRes.data.totali);
+    } catch (err) {
+      console.error(err);
+      alert('Errore durante la rimozione dell\'alimento');
+    }
+  };
+
   return (
     <div className="animate-fade-in">
       <div className="flex-between" style={{ marginBottom: '2rem' }}>
@@ -70,11 +84,20 @@ function DiaryPage({ userId }) {
                           {a.quantita_cruda_g}g crudo - Cottura: {a.cottura}
                         </div>
                       </div>
-                      <div className="meal-item-stats">
-                        <div style={{ color: 'var(--primary)' }}>{Math.round(a.calcolati.cal)} kcal</div>
-                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                          P:{Math.round(a.calcolati.pro)} C:{Math.round(a.calcolati.car)} G:{Math.round(a.calcolati.gra)}
+                      <div className="meal-item-stats flex-between" style={{ gap: '1.5rem' }}>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ color: 'var(--primary)', fontWeight: 'bold' }}>{Math.round(a.calcolati.cal)} kcal</div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                            P:{Math.round(a.calcolati.pro)} C:{Math.round(a.calcolati.car)} G:{Math.round(a.calcolati.gra)}
+                          </div>
                         </div>
+                        <button 
+                          onClick={() => handleDeleteFood(a.id)}
+                          className="btn btn-secondary" 
+                          style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', backgroundColor: 'rgba(239, 68, 68, 0.2)', color: '#ef4444' }}
+                        >
+                          X
+                        </button>
                       </div>
                     </div>
                   ))

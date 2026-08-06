@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS pasto_alimenti (
 INSERT INTO condimenti (nome, calorie_100g, proteine_100g, carboidrati_100g, grassi_100g) VALUES
 ('Olio Extravergine d''Oliva', 899, 0, 0, 99.9),
 ('Olio di Semi di Girasole', 899, 0, 0, 99.9),
-('Burro', 717, 0.8, 0.1, 81.1),
+('Burro', 717, 0.8, 0.1, 81.1)
 ON DUPLICATE KEY UPDATE id=id;
 
 -- Popolamento utente base per test (ID 1)
