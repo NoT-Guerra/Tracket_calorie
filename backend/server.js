@@ -7,11 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middlewares
-app.use(cors({
-  origin: process.env.FRONTEND_URL || '*', // Allow frontend URL from env, or all if not set
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/public', express.static(path.join(__dirname, 'public')));
@@ -36,10 +32,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Errore interno del server' });
 });
 
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Server avviato sulla porta ${PORT}`);
-  });
-}
-
-module.exports = app;
+app.listen(PORT, () => {
+  console.log(`Server avviato sulla porta ${PORT}`);
+});

@@ -3,15 +3,13 @@ const mysql = require('mysql2');
 // Configurazione della connessione
 // Modifica i parametri con le tue credenziali locali o di Altervista
 const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'calorie_tracker',
-  port: process.env.DB_PORT || 3306,
+  host: 'localhost',
+  user: 'root',
+  password: '', // Inserisci la tua password
+  database: 'calorie_tracker',
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0,
-  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined
+  queueLimit: 0
 };
 
 const pool = mysql.createPool(dbConfig);

@@ -4,13 +4,12 @@ const multer = require('multer');
 const path = require('path');
 const db = require('../database/db');
 const pdfController = require('../controllers/pdfController');
-
 const os = require('os');
 
 // Configurazione multer per l'upload di immagini
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, os.tmpdir());
+    cb(null, path.join(__dirname, '../public/uploads/'));
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
