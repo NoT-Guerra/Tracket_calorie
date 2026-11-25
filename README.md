@@ -1,105 +1,74 @@
 # Tracker Calorie e Nutrienti
 
-Applicazione Web per il tracciamento giornaliero di calorie e macronutrienti, con supporto per metodi di cottura, calcolo accurato dell'assorbimento dei grassi (es. frittura/padella) e esportazione del diario in PDF.
+Applicazione Web locale per il tracciamento giornaliero di calorie, macronutrienti e fibre, con supporto per metodi di cottura, calcolo dell'assorbimento dei grassi/condimenti (es. in padella o frittura, con opzione scolo -40%), ricerca integrata con Open Food Facts e generazione del diario in PDF.
 
 ## Struttura del Progetto
 
-Il progetto è diviso in due parti principali:
-- `/frontend`: Applicazione React creata con Vite, che si occupa della UI.
-- `/backend`: API REST in Node.js con Express, che interagisce con un database MariaDB.
+Il progetto è diviso in due parti:
+- `/backend`: API REST in Node.js + Express collegata a un database locale MySQL / MariaDB.
+- `/frontend`: Applicazione React + Vite (con supporto PWA e proxy configurato verso il backend locale).
 
 ## Prerequisiti
 
-Per eseguire questo progetto localmente o su un server, avrai bisogno di:
-- Node.js (v16+)
-- MariaDB / MySQL
-- npm o yarn
+Per eseguire il progetto in locale:
+- **Node.js** (v18+ consigliato)
+- **MariaDB** o **MySQL** in esecuzione in locale (es. XAMPP, MariaDB standalone, MySQL Server)
+- **npm**
 
-## Setup Iniziale
+---
 
-### 1. Database
+## Setup Rapido in Locale
 
-1. Avvia il tuo server MariaDB locale (es. XAMPP, o server standalone).
-2. Crea un database chiamato `calorie_tracker` se non è già presente, oppure importa il file `/backend/database/schema.sql` direttamente nel tuo client SQL preferito (phpMyAdmin, DBeaver, ecc.).
-   
-   Lo script `schema.sql` creerà in automatico le tabelle richieste e inserirà un set predefinito di **condimenti** e un utente di test con ID 1.
+### 1. Configurazione Backend e Database
 
-### 2. Backend Configurazione e Avvio
-
-1. Entra nella directory del backend:
+1. Entra nella cartella `backend` e installa le dipendenze:
    ```bash
    cd backend
-   ```
-2. Installa le dipendenze:
-   ```bash
    npm install
    ```
-3. Configura le credenziali del database aprendo il file `backend/database/db.js` e modificando `user`, `password` e `database` secondo la tua configurazione locale.
-4. Avvia il server in modalità sviluppo:
+2. Crea il file `.env` copiando `.env.example`:
+   ```bash
+   cp .env.example .env
+   ```
+   Modifica `.env` con le credenziali del tuo database locale (`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`).
+
+3. Inizializza il database e popola gli alimenti base con un unico comando:
+   ```bash
+   npm run db:init
+   ```
+   Questo comando esegue in sequenza:
+   - `temp_import.js`: crea il database `calorie_tracker`, tutte le tabelle (con vincolo `UNIQUE(nome, marca)` su `alimenti`), i condimenti predefiniti e l'utente iniziale.
+   - `seed.js`: importa ~200 alimenti generici italiani (`alimenti_base.json`, basati sui valori nutrizionali CREA per 100g a crudo) e, se presente nella cartella `backend/`, importa anche i prodotti italiani (`countries_tags` contenente `italy`) da `openfoodfacts-products.csv`.
+
+   > **Nota su Open Food Facts**: Non è necessario scaricare il dump CSV da diversi GB. Quando cerchi un prodotto nell'app che non è presente nel DB locale (oppure clicchi su *"Cerca su Open Food Facts"*), il backend interroga automaticamente l'API online di Open Food Facts Italia e salva i risultati in cache nel database locale.
+
+4. Avvia il server backend:
    ```bash
    npm run dev
    ```
-   Il server partirà su `http://localhost:3001`.
+   Il backend sarà attivo su `http://localhost:3001`.
 
-### 3. Popolamento Dati (Seed)
+### 2. Avvio Frontend
 
-Per rendere l'applicazione utilizzabile offline, popoleremo il database con un file CSV di Open Food Facts e alcuni alimenti base.
-
-1. Scarica il dump di Open Food Facts (file CSV) per l'Italia da `https://it.openfoodfacts.org/data` e posiziona il file rinominato come `openfoodfacts-products.csv` dentro la cartella `backend/`.
-2. Assicurati che il file `alimenti_base.json` sia presente nella stessa cartella.
-3. Esegui lo script di seed:
-   ```bash
-   npm run seed
-   ```
-   Lo script leggerà il file JSON per i cibi non confezionati e le prime migliaia di righe valide dal CSV, inserendole in MariaDB.
-
-### 4. Frontend Configurazione e Avvio
-
-1. Apri un nuovo terminale ed entra nella directory frontend:
+1. In un nuovo terminale, entra nella cartella `frontend` e installa le dipendenze:
    ```bash
    cd frontend
-   ```
-2. Installa le dipendenze:
-   ```bash
    npm install
    ```
-3. Avvia il server di sviluppo React:
+2. Avvia il server di sviluppo Vite:
    ```bash
    npm run dev
    ```
-   L'applicazione sarà raggiungibile (tipicamente) su `http://localhost:5173`. Il frontend è già configurato per fare il proxy delle richieste API verso `localhost:3001`.
+3. Apri il browser all'indirizzo `http://localhost:5173`.
+   Tutte le chiamate a `/api` e alle immagini caricate in `/public` passano automaticamente dal proxy di Vite.
 
 ---
 
-## Deploy su Altervista
+## Funzionalità Principali
 
-Hai menzionato di voler caricare il progetto su GitHub e poi hostarlo su Altervista. 
-
-> **ATTENZIONE**: Altervista, nei suoi piani base (Hosting classico), supporta solo l'esecuzione di script **PHP** e fornisce un database MySQL/MariaDB. **Non supporta l'esecuzione nativa di applicazioni Node.js (Express)**.
-
-Hai quindi le seguenti opzioni per l'hosting:
-
-### Opzione 1: Frontend su Altervista, Backend su servizio esterno (es. Render, Heroku)
-Questa è la strada consigliata se vuoi mantenere il backend Node.js intatto.
-1. Carica il backend (Node.js) su una piattaforma gratuita come Render.com, Fly.io, o Heroku. Dovrai usare un database MySQL remoto (es. PlanetScale, Aiven, o lo stesso DB di Altervista se sblocchi la "Server to Server connection").
-2. Nel frontend, fai la **build** per produzione:
-   ```bash
-   cd frontend
-   npm run build
-   ```
-3. All'interno della cartella `frontend/dist` troverai i file statici compilati (HTML, CSS, JS). 
-4. Carica l'intero contenuto della cartella `dist` tramite FTP sul tuo spazio web di Altervista (nella directory principale `htdocs`).
-5. Ricorda di aggiornare nel frontend (o tramite Variabili d'Ambiente in fase di build) l'URL base di Axios per puntare al nuovo server backend (es. `https://tuo-backend.render.com/api`).
-
-### Opzione 2: Riscrivere il backend in PHP
-Se **devi** hostare l'intera applicazione solo su Altervista, potrai utilizzare il frontend React (compilandolo come al punto precedente), ma dovrai riscrivere le API del backend (i file in `backend/routes/api.js` e la generazione del PDF) usando **PHP**. Le query al database MariaDB rimarranno identiche, cambierà solo il linguaggio del server.
-
----
-
-## Struttura Database Principale
-
-- `utenti`: Informazioni utente e obiettivi di macronutrienti giornalieri.
-- `alimenti`: Database globale dei cibi (da OFF e creati dall'utente). I valori sono sempre calcolati su **100g a crudo**.
-- `condimenti`: Grassi/oli aggiuntivi calcolati nelle preparazioni in padella/fritte.
-- `pasti`: Raggruppamento per data e tipo (Colazione, Pranzo, Cena, Spuntino).
-- `pasto_alimenti`: Tabella ponte che registra i grammi consumati (crudi), la cottura, ed eventuali condimenti usati (compreso lo scolo al 40%).
+- **Diario Giornaliero con Navigazione Date**: scorri tra i giorni precedenti/successivi o seleziona una data dal calendario.
+- **Barra di Progresso Completa**: visualizza calorie, proteine, carboidrati, grassi e fibre rispetto agli obiettivi giornalieri.
+- **Modifica Quantità ed Eliminazione**: modifica direttamente dal diario i grammi a crudo (e i grammi di condimento) di un alimento già inserito oppure rimuovilo.
+- **Gestione Obiettivi e Profili Utente (`/obiettivi`)**: personalizza il fabbisogno giornaliero di calorie, proteine, carboidrati, grassi e fibre, o crea nuovi profili utente selezionabili dalla barra di navigazione.
+- **Database Alimenti + Ricerca Open Food Facts**: oltre 195 alimenti base generici pronti all'uso più ricerca e caching automatico da Open Food Facts e creazione di alimenti personalizzati con foto.
+- **Esportazione PDF**: scarica il riepilogo giornaliero in PDF con il calcolo condiviso dei macronutrienti (inclusi i condimenti).

@@ -1,13 +1,13 @@
 import React from 'react';
 
 function ProgressBar({ totali, obiettivi }) {
-  const percentCal = Math.min((totali.calorie / obiettivi.calorie) * 100, 100) || 0;
+  const percentCal = Math.min((totali.calorie / (obiettivi.calorie || 1)) * 100, 100) || 0;
 
   return (
     <div className="glass-panel progress-container animate-fade-in">
       <div className="progress-header">
         <span>Calorie Giornaliere</span>
-        <span>{Math.round(totali.calorie)} / {obiettivi.calorie} kcal</span>
+        <span>{Math.round(totali.calorie || 0)} / {Math.round(obiettivi.calorie || 0)} kcal</span>
       </div>
       <div className="progress-bar-bg">
         <div className="progress-bar-fill" style={{ width: `${percentCal}%` }}></div>
@@ -16,18 +16,23 @@ function ProgressBar({ totali, obiettivi }) {
       <div className="macros-summary">
         <div className="macro-item">
           <div className="macro-label">Proteine</div>
-          <div className="macro-value pro-color">{Math.round(totali.proteine)}g</div>
-          <div className="macro-label" style={{fontSize: '0.75rem', marginTop: '0.25rem'}}>su {obiettivi.proteine}g</div>
+          <div className="macro-value pro-color">{Math.round(totali.proteine || 0)}g</div>
+          <div className="macro-label" style={{fontSize: '0.75rem', marginTop: '0.25rem'}}>su {Math.round(obiettivi.proteine || 0)}g</div>
         </div>
         <div className="macro-item">
           <div className="macro-label">Carboidrati</div>
-          <div className="macro-value car-color">{Math.round(totali.carboidrati)}g</div>
-          <div className="macro-label" style={{fontSize: '0.75rem', marginTop: '0.25rem'}}>su {obiettivi.carboidrati}g</div>
+          <div className="macro-value car-color">{Math.round(totali.carboidrati || 0)}g</div>
+          <div className="macro-label" style={{fontSize: '0.75rem', marginTop: '0.25rem'}}>su {Math.round(obiettivi.carboidrati || 0)}g</div>
         </div>
         <div className="macro-item">
           <div className="macro-label">Grassi</div>
-          <div className="macro-value gra-color">{Math.round(totali.grassi)}g</div>
-          <div className="macro-label" style={{fontSize: '0.75rem', marginTop: '0.25rem'}}>su {obiettivi.grassi}g</div>
+          <div className="macro-value gra-color">{Math.round(totali.grassi || 0)}g</div>
+          <div className="macro-label" style={{fontSize: '0.75rem', marginTop: '0.25rem'}}>su {Math.round(obiettivi.grassi || 0)}g</div>
+        </div>
+        <div className="macro-item">
+          <div className="macro-label">Fibre</div>
+          <div className="macro-value fib-color">{Math.round(totali.fibre || 0)}g</div>
+          <div className="macro-label" style={{fontSize: '0.75rem', marginTop: '0.25rem'}}>su {Math.round(obiettivi.fibre || 0)}g</div>
         </div>
       </div>
     </div>

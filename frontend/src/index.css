@@ -18,6 +18,7 @@
   --color-pro: #ef4444;
   --color-car: #eab308;
   --color-gra: #3b82f6;
+  --color-fib: #10b981;
 }
 
 * {
@@ -102,13 +103,14 @@ body {
   font-size: 0.9rem;
 }
 
+.user-select select,
 .user-select input {
-  width: 60px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border-glass);
   color: var(--text-main);
   border-radius: var(--radius-sm);
-  padding: 0.25rem 0.5rem;
+  padding: 0.35rem 0.6rem;
+  font-family: inherit;
 }
 
 .main-content {
@@ -305,6 +307,7 @@ option {
 .pro-color { color: var(--color-pro); }
 .car-color { color: var(--color-car); }
 .gra-color { color: var(--color-gra); }
+.fib-color { color: var(--color-fib); }
 
 /* Diary List */
 .meal-section {
@@ -366,4 +369,114 @@ option {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.btn-sm {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+}
+
+/* Diary header & Date navigator */
+.diary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.date-navigator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.date-picker-input {
+  width: auto;
+  padding: 0.4rem 0.75rem;
+}
+
+/* Inline quantity editing in Diary */
+.inline-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.inline-edit-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.inline-edit-input {
+  width: 85px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+/* Responsive layout for FoodDetail */
+.food-detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+}
+
+.food-detail-summary {
+  padding: 2rem;
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+@media (max-width: 860px) {
+  .navbar {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+
+  .page-title {
+    font-size: 1.8rem;
+  }
+
+  .macros-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .food-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .food-detail-summary {
+    position: static;
+  }
+
+  .meal-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .meal-item-stats {
+    width: 100%;
+    justify-content: space-between;
+  }
 }

@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS alimenti (
   carboidrati_100g DECIMAL(4,1) NOT NULL,
   grassi_100g DECIMAL(4,1) NOT NULL,
   fibra_100g DECIMAL(4,1) DEFAULT 0,
-  creato_da_utente BOOLEAN DEFAULT FALSE
+  creato_da_utente BOOLEAN DEFAULT FALSE,
+  UNIQUE KEY unique_nome_marca (nome, marca)
 );
 
 CREATE TABLE IF NOT EXISTS condimenti (
